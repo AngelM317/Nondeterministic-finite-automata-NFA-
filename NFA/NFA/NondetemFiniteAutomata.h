@@ -2,7 +2,6 @@
 #include"Vector.hpp"
 #include"Pair.hpp"
 #include"MySet.hpp"
-#include "SharedPtr.hpp"
 #include "MyString.h"
 class NondetemFiniteAutomata
 {
