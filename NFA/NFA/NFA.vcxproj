@@ -127,7 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\pract\Nondeterministic-finite-automata-NFA-\Nondeterministic finite automata (NFA)\Nondeterministic finite automata (NFA)\NondetemFiniteAutomata.cpp" />
+    <ClCompile Include="MyString.cpp" />
     <ClCompile Include="NFA.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MySet.hpp" />
+    <ClInclude Include="MyString.h" />
+    <ClInclude Include="NondetemFiniteAutomata.h" />
+    <ClInclude Include="Pair.hpp" />
+    <ClInclude Include="Vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
