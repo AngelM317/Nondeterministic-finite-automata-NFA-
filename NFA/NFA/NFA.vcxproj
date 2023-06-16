@@ -127,9 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\pract\Nondeterministic-finite-automata-NFA-\Nondeterministic finite automata (NFA)\Nondeterministic finite automata (NFA)\NondetemFiniteAutomata.cpp" />
     <ClCompile Include="MyString.cpp" />
     <ClCompile Include="NFA.cpp" />
+    <ClCompile Include="NondetemFiniteAutomata.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MySet.hpp" />
