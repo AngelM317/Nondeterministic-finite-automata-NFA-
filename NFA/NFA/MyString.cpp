@@ -6,6 +6,14 @@
 
 MyString::MyString() : MyString("") { }
 
+MyString::MyString(char ch)
+{
+	char data[2];
+	data[0] = ch;
+	ssoData[MyString::SSO_MAX_SIZE] = MyString::SSO_MAX_SIZE - 1;
+	strcpy(ssoData, data);
+}
+
 MyString::MyString(size_t size)
 {
 	_data = new char[size + 1];

@@ -1,7 +1,7 @@
 #include "NondetemFiniteAutomata.h"
 #include <exception>
 
-namespace
+namespace //helping funcs
 {
 
 	bool hasTransitionWithLetter(size_t state, char ch, const Vector<Vector<Pair<char, size_t>>>& transitions)

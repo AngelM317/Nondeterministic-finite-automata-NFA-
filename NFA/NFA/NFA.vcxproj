@@ -127,15 +127,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConcatRegex.cpp" />
+    <ClCompile Include="KleeneRegex.cpp" />
     <ClCompile Include="MyString.cpp" />
     <ClCompile Include="NFA.cpp" />
     <ClCompile Include="NondetemFiniteAutomata.cpp" />
+    <ClCompile Include="Regex.cpp" />
+    <ClCompile Include="SimpleRegex.cpp" />
+    <ClCompile Include="UnionRegex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConcatRegex.h" />
+    <ClInclude Include="KleeneRegex.h" />
     <ClInclude Include="MySet.hpp" />
     <ClInclude Include="MyString.h" />
     <ClInclude Include="NondetemFiniteAutomata.h" />
+    <ClInclude Include="OperationsWithAutomata.h" />
     <ClInclude Include="Pair.hpp" />
+    <ClInclude Include="Regex.h" />
+    <ClInclude Include="SimpleRegex.h" />
+    <ClInclude Include="UnionRegex.h" />
     <ClInclude Include="Vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -33,7 +33,7 @@ namespace
 		NondetemFiniteAutomata toReturn;
 		for (size_t i = 0; i < automata2.getAlphabeth().getSize(); i++)
 		{
-			toReturn.addLetter(automata2.getAlphabeth().[i]);
+			toReturn.addLetter(automata2.getAlphabeth()[i]);
 		}
 		for (size_t i = 0; i < automata2.getStatesCount(); i++)
 		{
@@ -65,7 +65,7 @@ namespace
 		}
 		for (size_t i = 0; i < automata2.getFinalStates().getSize(); i++)
 		{
-			toReturn.makeStateFinal(automata2.getFinalStates().[i] + automata1.getStatesCount());
+			toReturn.makeStateFinal(automata2.getFinalStates()[i] + automata1.getStatesCount());
 		}
 
 		for (size_t i = 0; i < automata1.getFinalStates().getSize(); i++)

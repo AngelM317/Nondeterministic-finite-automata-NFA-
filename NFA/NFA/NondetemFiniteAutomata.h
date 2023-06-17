@@ -16,6 +16,8 @@ private:
 	void decreaseStatesFromIndex(size_t index);
 	void accesibleStatesFrom(MySet<size_t>& states,size_t state) const;
 public:
+	NondetemFiniteAutomata() = default;
+	
 	friend bool isAcceptedFromState(size_t state, const MyString& word, const NondetemFiniteAutomata&) ;
 	void setTransitions(Vector<Vector<Pair<char, size_t>>>& transitions);
 	void setStates(const Vector<size_t>& states);
