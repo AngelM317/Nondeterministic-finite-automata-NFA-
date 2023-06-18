@@ -2,10 +2,27 @@
 //
 
 #include <iostream>
+#include "Regex.h"
+#include "RegexWrap.h"
+#include "OperationsWithAutomata.h"
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	MyString hmm = "(a)*(b)*ccc + (a)*(b)*";
+	RegexWrap ss(hmm);
+	std::cout<<ss.getRegex()->getAutomation().accept("aaaaabbbbbcccbbbb");
+	NondetemFiniteAutomata test = ss.getRegex()->getAutomation();
+	//test.printTransitions();
+	MyString agg = test.regexFromAutomation();
+	ss.clearWs(agg);
+	std::cout << agg;
+	RegexWrap rk(agg);
+	
+	
+	
+
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

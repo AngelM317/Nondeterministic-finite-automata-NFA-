@@ -2,19 +2,27 @@
 #include "NondetemFiniteAutomata.h"
 namespace
 {
+	void addAlphabets(NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2)
+	{
+		for (size_t i = 0; i < automata2.getAlphabeth().getSize(); i++)
+		{
+			automata1.addLetter(automata2.getAlphabeth().getElements()[i]);
+		}
+	}
+
 	NondetemFiniteAutomata Union(const NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2)
 	{
 		NondetemFiniteAutomata toReturn(automata1);
-		for (size_t i = 0; i < automata2.getAlphabeth().getSize(); i++)
-		{
-			toReturn.addLetter(automata2.getAlphabeth().getElements()[i]);
-		}
+		addAlphabets(toReturn, automata2);
 		for (size_t i = 0; i < automata2.getStatesCount(); i++)
 		{
 			toReturn.addState();
+		}
+		for (size_t i = 0; i < automata2.getStatesCount(); i++)
+		{
 			for (size_t j = 0; j < automata2.getTransitions()[i].getSize(); j++)
 			{
-				toReturn.addTransition(toReturn.getStatesCount(), automata2.getTransitions()[i][j].getFirst(), automata2.getTransitions()[i][j].getSecond());
+				toReturn.addTransition(automata1.getStatesCount() + i + 1, automata2.getTransitions()[i][j].getFirst(), automata2.getTransitions()[i][j].getSecond() + automata1.getStatesCount());
 			}
 		}
 		for (size_t i = 0; i < automata2.getFinalStates().getSize(); i++)
@@ -30,19 +38,22 @@ namespace
 
 	NondetemFiniteAutomata Concat(const NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2)
 	{
-		NondetemFiniteAutomata toReturn;
-		for (size_t i = 0; i < automata2.getAlphabeth().getSize(); i++)
-		{
-			toReturn.addLetter(automata2.getAlphabeth().[i]);
-		}
+		NondetemFiniteAutomata toReturn = automata1;
+		addAlphabets(toReturn, automata2);
+
 		for (size_t i = 0; i < automata2.getStatesCount(); i++)
 		{
 			toReturn.addState();
+		}
+
+		for (size_t i = 0; i < automata2.getStatesCount(); i++)
+		{
 			for (size_t j = 0; j < automata2.getTransitions()[i].getSize(); j++)
 			{
-				toReturn.addTransition(toReturn.getStatesCount(), automata2.getTransitions()[i][j].getFirst(), automata2.getTransitions()[i][j].getSecond());
+				toReturn.addTransition(automata1.getStatesCount()+i+1, automata2.getTransitions()[i][j].getFirst(), automata2.getTransitions()[i][j].getSecond()+ automata1.getStatesCount());
 			}
 		}
+
 		bool clear = true;
 		for (size_t i = 0; i < automata2.getFinalStates().getSize(); i++)
 		{
@@ -65,7 +76,7 @@ namespace
 		}
 		for (size_t i = 0; i < automata2.getFinalStates().getSize(); i++)
 		{
-			toReturn.makeStateFinal(automata2.getFinalStates().[i] + automata1.getStatesCount());
+			toReturn.makeStateFinal(automata2.getFinalStates()[i] + automata1.getStatesCount());
 		}
 
 		for (size_t i = 0; i < automata1.getFinalStates().getSize(); i++)
@@ -74,9 +85,9 @@ namespace
 			{
 				for (size_t s = 0; s < automata2.getTransitions()[automata2.getStartingStates()[j] - 1].getSize(); s++)
 				{
-					char ch = automata2.getTransitions()[automata2.getStartingStates()[j] - 1][s].getFirst();					//To be more readable!; A little sacrefice
-					size_t to = automata2.getTransitions()[automata2.getStartingStates()[j] - 1][s].getSecond();				//To be more readable!;
-					size_t from = automata1.getFinalStates()[i];																//To be more readable!;
+					char ch = automata2.getTransitions()[automata2.getStartingStates()[j] - 1][s].getFirst();											//To be more readable!; A little sacrefice
+					size_t to = automata2.getTransitions()[automata2.getStartingStates()[j] - 1][s].getSecond() + automata1.getStatesCount();				//To be more readable!;
+					size_t from = automata1.getFinalStates()[i];																						//To be more readable!;
 					toReturn.addTransition(from, ch, to);
 				}
 			}
@@ -97,7 +108,7 @@ namespace
 				{
 					char ch = toReturn.getTransitions()[toReturn.getStartingStates()[j] - 1][s].getFirst();
 					size_t to = toReturn.getTransitions()[toReturn.getStartingStates()[j] - 1][s].getSecond();
-					size_t from = automata1.getFinalStates()[i];
+					size_t from = toReturn.getFinalStates()[i];
 					toReturn.addTransition(from, ch, to);
 				}
 			}

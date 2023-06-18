@@ -1,9 +1,7 @@
 #include "NondetemFiniteAutomata.h"
 #include <exception>
-
-namespace
+namespace //helping funcs
 {
-
 	bool hasTransitionWithLetter(size_t state, char ch, const Vector<Vector<Pair<char, size_t>>>& transitions)
 	{
 		for (size_t i = 0; i < transitions[state - 1].getSize(); i++)
@@ -76,6 +74,24 @@ void NondetemFiniteAutomata::accesibleStatesFrom(MySet<size_t>& accessedStates, 
 			accesibleStatesFrom(accessedStates, transitions[state - 1][i].getSecond());
 		}
 	}
+}
+bool NondetemFiniteAutomata::isErrorState(size_t state) const
+{
+	if (isFinalState(state))
+	{
+		return false;
+	}
+	for (size_t i = 0; i < transitions[state - 1].getSize(); i++)
+	{
+		if (transitions[state - 1][i].getSecond() != state)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+NondetemFiniteAutomata::NondetemFiniteAutomata(const MyString& regex)
+{
 }
 
 
@@ -302,8 +318,132 @@ void NondetemFiniteAutomata::makeTotal()
 	}
 }
 
-void NondetemFiniteAutomata::convertToDfa()
+MyString NondetemFiniteAutomata::regexFromAutomation() const
 {
+	if (isEmptyLanguage())
+	{
+		return "~";
+	}
+	MyString toReturn = "";
+	NondetemFiniteAutomata temp(*this);
+	temp.minimize();
+	temp.addState();
+	temp.addLetter('@');
+	for (size_t i = 0; i < temp.finalStates.getSize(); i++)
+	{
+		temp.addTransition(temp.finalStates[i], '@', temp.getStatesCount());
+	}
+	temp.addState();
+	temp.addTransition(temp.getStatesCount(), '@', 1);
+	temp.clearFinalStates();
+	temp.clearStartingStates();
+	temp.makeStateFinal(temp.getStatesCount() - 1);
+	temp.makeStateStarting(temp.getStatesCount());
+	temp.removeUnaccessibleStates();
+	temp.printTransitions();
+	Vector<Vector<Pair<MyString,size_t>>> allRegTransitions;
+
+	for (size_t i = 0; i < temp.transitions.getSize(); i++)
+	{
+		allRegTransitions.pushBack(Vector<Pair<MyString, size_t>>());
+		for (size_t j = 0; j < temp.transitions[i].getSize(); j++)
+		{
+			allRegTransitions[i].pushBack(Pair<MyString, size_t>(temp.transitions[i][j].getFirst(), temp.transitions[i][j].getSecond()));
+		}
+	}
+	for (size_t i = 0; i < temp.states.getSize(); i++)
+	{
+		MyString Kleenie = "(";
+		bool first = true;
+		for (size_t k = 0; k < allRegTransitions[i].getSize(); k++)
+		{
+			
+				if (allRegTransitions[i][k].getSecond() == i + 1)
+				{
+					if (first)
+					{
+						Kleenie += allRegTransitions[i][k].getFirst();
+						first = false;
+					}
+					else
+					{
+						Kleenie += "+";
+						Kleenie += allRegTransitions[i][k].getFirst();
+					}
+				}
+	
+		}
+		if (Kleenie != "(")
+		{
+			Kleenie += ")*";
+		}
+		else
+		{
+			Kleenie = "";
+		}
+		for (size_t j = 0; j < allRegTransitions.getSize(); j++)
+		{
+			if (j <= i)
+				continue;
+			size_t fixSize = allRegTransitions[j].getSize();
+			for (size_t k = 0; k <fixSize; k++)
+			{
+				
+				if (allRegTransitions[j][k].getSecond() == i + 1)
+				{
+					size_t fixSize2 = allRegTransitions[i].getSize();
+					for (size_t m = 0; m < fixSize2; m++)
+					{
+						Pair<MyString, size_t> pairToCocat = allRegTransitions[i][m];
+						if(pairToCocat.getSecond()!=i+1)
+						{
+							allRegTransitions[j].pushBack(Pair<MyString, size_t>(allRegTransitions[j][k].getFirst() +Kleenie+ pairToCocat.getFirst(), pairToCocat.getSecond()));
+							std::cout << j+1 << " | " << allRegTransitions[j][k].getFirst() + Kleenie + pairToCocat.getFirst() << " | " << pairToCocat.getSecond() << "\n";
+						}
+					}
+					if(!temp.isStartingState(j+1))
+					allRegTransitions[j].popAt(k);
+					
+				}
+			}
+		}
+
+	}
+	bool first = true;
+	for (size_t i = 0; i < allRegTransitions[temp.getStartingStates()[0]-1].getSize(); i++)
+	{
+		if (temp.isFinalState(allRegTransitions[temp.getStartingStates()[0] - 1][i].getSecond()))
+		{
+			if (first)
+			{
+				toReturn += allRegTransitions[temp.getStartingStates()[0] - 1][i].getFirst();
+				first = false;
+			}
+			else
+			{
+				toReturn += "+";
+				toReturn += allRegTransitions[temp.getStatesCount() - 1][i].getFirst();
+			}
+		}	
+	}
+	return toReturn;
+	
+
+
+
+
+}
+
+void NondetemFiniteAutomata::minimize()
+{
+	reverseAutomata();
+	convertToDfa();
+	reverseAutomata();
+	convertToDfa();
+}
+
+void NondetemFiniteAutomata::convertToDfa()
+ {
 	//makeTotal();
 	Vector<Vector<Pair<char, size_t>>> newTransitions;
 	MySet<MySet<size_t>> newStates;
@@ -409,6 +549,14 @@ void NondetemFiniteAutomata::reverseAutomata()
 	MySet<size_t> temp = finalStates;
 	finalStates = startingStates;
 	startingStates = temp;
+
+	for (size_t i = 0; i < getStatesCount(); i++)
+	{
+		if (isErrorState(i + 1))
+		{
+			errorStates.addElement(i + 1);
+		}
+	}
 }
 
 bool isAcceptedFromState(size_t state, const MyString& word, const NondetemFiniteAutomata& automata)
