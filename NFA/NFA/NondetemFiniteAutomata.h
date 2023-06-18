@@ -12,11 +12,12 @@ private:
 	MySet<size_t> startingStates;
 	Vector<size_t> states;
 	MySet<size_t> errorStates;
-	MySet<size_t> universumStates;
 	void decreaseStatesFromIndex(size_t index);
 	void accesibleStatesFrom(MySet<size_t>& states,size_t state) const;
+	bool isErrorState(size_t index) const;
 public:
 	NondetemFiniteAutomata() = default;
+	NondetemFiniteAutomata(const MyString& regex);
 	
 	friend bool isAcceptedFromState(size_t state, const MyString& word, const NondetemFiniteAutomata&) ;
 	void setTransitions(Vector<Vector<Pair<char, size_t>>>& transitions);
@@ -43,9 +44,12 @@ public:
 	bool isEmptyLanguage() const;
 	bool accept(const MyString& word) const;
 
+	void minimize();
+
 	void makeTotal();
 	void convertToDfa();
 	void reverseAutomata();
+	MyString regexFromAutomation() const;
 
 	void clearFinalStates();
 	void clearStartingStates();

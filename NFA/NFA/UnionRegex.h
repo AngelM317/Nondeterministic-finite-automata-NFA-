@@ -3,19 +3,11 @@
 class UnionRegex:public Regex
 {
 private:
-	Regex* regex1;
-	Regex* regex2;
-	void free();
-	void copyFrom(const UnionRegex& other);
-	void moveFrom(UnionRegex&& other);
+	SharedPtr<Regex> regex1;
+	SharedPtr<Regex> regex2;
 public:
-	UnionRegex(Regex* regex1, Regex* regex2);
-	UnionRegex(const UnionRegex& other);
-	UnionRegex(UnionRegex&& other);
-	~UnionRegex();
-	UnionRegex& operator=(const UnionRegex& other);
-	UnionRegex& operator=(UnionRegex&& other);
+	UnionRegex(SharedPtr<Regex> regex1, SharedPtr<Regex> regex2);
 	void initializeAutomation() override;
-	Regex* clone()const override;
+	SharedPtr<Regex> clone()const override;
 };
 

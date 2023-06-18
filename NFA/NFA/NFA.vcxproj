@@ -133,6 +133,7 @@
     <ClCompile Include="NFA.cpp" />
     <ClCompile Include="NondetemFiniteAutomata.cpp" />
     <ClCompile Include="Regex.cpp" />
+    <ClCompile Include="RegexWrap.cpp" />
     <ClCompile Include="SimpleRegex.cpp" />
     <ClCompile Include="UnionRegex.cpp" />
   </ItemGroup>
@@ -145,8 +146,11 @@
     <ClInclude Include="OperationsWithAutomata.h" />
     <ClInclude Include="Pair.hpp" />
     <ClInclude Include="Regex.h" />
+    <ClInclude Include="RegexWrap.h" />
+    <ClInclude Include="SharedPtr.hpp" />
     <ClInclude Include="SimpleRegex.h" />
     <ClInclude Include="UnionRegex.h" />
+    <ClInclude Include="UniquePointer.hpp" />
     <ClInclude Include="Vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

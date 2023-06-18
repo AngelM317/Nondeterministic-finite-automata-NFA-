@@ -2,18 +2,10 @@
 #include "Regex.h"
 class KleeneRegex: public Regex
 {
-	Regex* regex1;
-	void free();
-	void copyFrom(const KleeneRegex& other);
-	void moveFrom(KleeneRegex&& other);
+	SharedPtr<Regex> regex1;
 public:
-	KleeneRegex(Regex* regex1);
-	KleeneRegex(const KleeneRegex& other);
-	KleeneRegex(KleeneRegex&& other);
-	~KleeneRegex();
-	KleeneRegex& operator=(const KleeneRegex& other);
-	KleeneRegex& operator=(KleeneRegex&& other);
+	KleeneRegex(SharedPtr<Regex> regex1);
 	void initializeAutomation() override;
-	Regex* clone()const override;
+	SharedPtr<Regex> clone()const override;
 };
 

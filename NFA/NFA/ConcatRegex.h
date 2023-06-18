@@ -3,19 +3,12 @@
 class ConcatRegex : public Regex
 {
 private:
-	Regex* regex1;
-	Regex* regex2;
-	void free();
-	void copyFrom(const ConcatRegex& other);
-	void moveFrom(ConcatRegex&& other);
+	SharedPtr<Regex> regex1;
+	SharedPtr<Regex> regex2;
+
 public:
-	ConcatRegex(Regex* regex1, Regex* regex2);
-	ConcatRegex(const ConcatRegex& other);
-	ConcatRegex(ConcatRegex&& other);
-	~ConcatRegex();
-	ConcatRegex& operator=(const ConcatRegex& other);
-	ConcatRegex& operator=(ConcatRegex&& other);
+	ConcatRegex(const SharedPtr<Regex> regex1, const SharedPtr<Regex> regex2);
 	void initializeAutomation() override;
-	Regex* clone()const override;
+	SharedPtr<Regex> clone() const override;
 };
 

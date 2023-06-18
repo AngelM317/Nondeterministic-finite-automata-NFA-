@@ -39,6 +39,9 @@
     <ClCompile Include="KleeneRegex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RegexWrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MySet.hpp">
@@ -72,6 +75,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KleeneRegex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegexWrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedPtr.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UniquePointer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
