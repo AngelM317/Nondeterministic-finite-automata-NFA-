@@ -369,6 +369,6 @@ void Engine::executeCommand(const MyString& command)
 	}
 	catch (std::exception a)
 	{
-		std::cout << a.what()<<"cokcs";
+		std::cout << a.what()<<;
 	}
 }
