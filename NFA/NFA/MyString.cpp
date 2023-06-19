@@ -42,6 +42,21 @@ MyString::MyString(char ch): MyString(2, true)
 	_data[1] = '\0';
 }
 
+void MyString::setLength(size_t newLength)
+{
+	if (newLength <= strlen(_data))
+	{
+		return;
+	}
+	else
+	{
+		char* newData=new char[newLength + 1];
+		strcpy(newData, _data);
+		_data = newData;
+		_length = newLength;
+	}
+}
+
 MyString::MyString(const char* data) : MyString(strlen(data) + 1,true)
 {
 	strcpy(_data, data);

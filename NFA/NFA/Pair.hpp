@@ -11,9 +11,12 @@ public:
 	Pair(const T& first, const D& second);
 	const T& getFirst() const;
 	const D& getSecond() const;
+	T& getFirst();
+	D& getSecond();
 
 	void setFirst(const T& newValue);
 	void setSecond(const D& newValue);
+	bool operator==(const Pair<T, D>other) const;
 };
 
 template<typename T, typename D>
@@ -32,6 +35,18 @@ const D& Pair<T, D>::getSecond() const
 }
 
 template<typename T, typename D>
+T& Pair<T, D>::getFirst()
+{
+	return first;
+}
+
+template<typename T, typename D>
+D& Pair<T, D>::getSecond()
+{
+	return second;
+}
+
+template<typename T, typename D>
 void Pair<T, D>::setFirst(const T& newValue)
 {
 	first = newValue;
@@ -41,4 +56,10 @@ template<typename T, typename D>
 void Pair<T, D>::setSecond(const D& newValue)
 {
 	second = newValue;
+}
+
+template<typename T, typename D>
+inline bool Pair<T, D>::operator==(const Pair<T, D> other) const
+{
+	return this->first==other.first&&this->second==other.second;
 }

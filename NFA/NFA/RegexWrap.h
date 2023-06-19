@@ -14,6 +14,7 @@ public:
 	RegexWrap(MyString& exp);
 	bool isValidReggex(const MyString& exp) const;
 	SharedPtr<Regex>& getRegex();
+	bool operator==(const RegexWrap& other) const;
 	
 };
 

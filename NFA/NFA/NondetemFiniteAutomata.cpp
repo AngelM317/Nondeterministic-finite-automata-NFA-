@@ -340,7 +340,6 @@ MyString NondetemFiniteAutomata::regexFromAutomation() const
 	temp.makeStateFinal(temp.getStatesCount() - 1);
 	temp.makeStateStarting(temp.getStatesCount());
 	temp.removeUnaccessibleStates();
-	temp.printTransitions();
 	Vector<Vector<Pair<MyString,size_t>>> allRegTransitions;
 
 	for (size_t i = 0; i < temp.transitions.getSize(); i++)
@@ -398,7 +397,7 @@ MyString NondetemFiniteAutomata::regexFromAutomation() const
 						if(pairToCocat.getSecond()!=i+1)
 						{
 							allRegTransitions[j].pushBack(Pair<MyString, size_t>(allRegTransitions[j][k].getFirst() +Kleenie+ pairToCocat.getFirst(), pairToCocat.getSecond()));
-							std::cout << j+1 << " | " << allRegTransitions[j][k].getFirst() + Kleenie + pairToCocat.getFirst() << " | " << pairToCocat.getSecond() << "\n";
+							//std::cout << j+1 << " | " << allRegTransitions[j][k].getFirst() + Kleenie + pairToCocat.getFirst() << " | " << pairToCocat.getSecond() << "\n";
 						}
 					}
 					if(!temp.isStartingState(j+1))

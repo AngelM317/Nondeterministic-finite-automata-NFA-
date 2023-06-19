@@ -97,9 +97,13 @@ SharedPtr<Regex>& RegexWrap::getRegex()
 {
     return regex;
 }
+bool RegexWrap::operator==(const RegexWrap& other) const
+{
+    return this->regex->getText()==other.regex->getText();
+}
 RegexWrap::RegexWrap()
 {
-	this->regex = new SimpleRegex(nullptr);
+    this->regex = new SimpleRegex("~");
 }
 
 RegexWrap::RegexWrap(MyString& exp)

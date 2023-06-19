@@ -14,6 +14,7 @@ public:
 
 	MyString();
 	MyString(char ch);
+	void setLength(size_t);
 	MyString(const char* data);
 	MyString(const MyString& other);
 	MyString& operator=(const MyString& other);
