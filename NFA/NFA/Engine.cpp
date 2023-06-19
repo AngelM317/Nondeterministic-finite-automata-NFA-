@@ -11,13 +11,13 @@ void Engine::Exists(const MyString& name)
 		}
 	}
 }
-SharedPtr<RegexWrap> Engine::findAutomation(const MyString& name)
+RegexWrap& Engine::findAutomation(const MyString& name)
 {
 	for (size_t i = 0; i < automata.getSize(); i++)
 	{
 		if (automata[i].getSecond() == name)
 		{
-			return SharedPtr<RegexWrap>(&automata[i].getFirst());
+			return automata[i].getFirst();
 		}
 	}
 	throw std::exception("Not Found");
@@ -179,7 +179,7 @@ void Engine::saveAutomatioInFle(const MyString& name, const MyString& automation
 	{
 		std::ofstream file;
 		file.open(name.c_str());
-		file<<findAutomation(name)->getRegex()->getText();
+		file<<findAutomation(name).getRegex()->getText();
 	}
 	catch (std::exception a)
 	{
@@ -191,7 +191,7 @@ bool Engine::accepts(const MyString& name, const MyString& word)
 {
 	try
 	{
-		return findAutomation(name)->getRegex()->getAutomation().accept(word);
+		return findAutomation(name).getRegex()->getAutomation().accept(word);
 	}
 	catch (std::exception a)
 	{
@@ -203,7 +203,7 @@ void Engine::makeDeterm(const MyString& name)
 {
 	try
 	{
-		findAutomation(name)->getRegex()->getAutomation().convertToDfa();
+		findAutomation(name).getRegex()->getAutomation().convertToDfa();
 	}
 	catch (std::exception a)
 	{
@@ -215,7 +215,7 @@ void Engine::minimize(const MyString& name)
 {
 	try
 	{
-		findAutomation(name)->getRegex()->getAutomation().minimize();
+		findAutomation(name).getRegex()->getAutomation().minimize();
 	}
 	catch (std::exception a)
 	{
@@ -227,7 +227,7 @@ void Engine::addUnionOfAutomata(const MyString& name1, const MyString& name2, co
 {
 	try
 	{
-		MyString unionRegex = findAutomation(name1)->getRegex()->getText() + "+"+ findAutomation(name2)->getRegex()->getText();
+		MyString unionRegex = findAutomation(name1).getRegex()->getText() + "+"+ findAutomation(name2).getRegex()->getText();
 		createAutomation(unionRegex, nameOfUnion);
 	}
 	catch (std::exception a)
@@ -241,7 +241,7 @@ void Engine::addKleenieOfAutomata(const MyString& nameOfAutomation, const MyStri
 	try
 	{
 		MyString kleenieRegex = "(";
-		kleenieRegex = kleenieRegex+ findAutomation(nameOfAutomation)->getRegex()->getText() + ")*";
+		kleenieRegex = kleenieRegex+ findAutomation(nameOfAutomation).getRegex()->getText() + ")*";
 		createAutomation(kleenieRegex, nameOfKleenieAutomation);
 	}
 	catch (std::exception a)
@@ -254,7 +254,7 @@ void Engine::addConcatenationOfAutomata(const MyString& name1, const MyString& n
 {
 	try
 	{
-		MyString unionRegex = findAutomation(name1)->getRegex()->getText() + findAutomation(name2)->getRegex()->getText();
+		MyString unionRegex = findAutomation(name1).getRegex()->getText() + findAutomation(name2).getRegex()->getText();
 		createAutomation(unionRegex, nameOFConcat);
 	}
 	catch (std::exception a)
@@ -267,7 +267,7 @@ void Engine::reverseAutomata(const MyString& name)
 {
 	try
 	{
-		findAutomation(name)->getRegex()->getAutomation().reverseAutomata();
+		findAutomation(name).getRegex()->getAutomation().reverseAutomata();
 	}
 	catch (std::exception a)
 	{
@@ -279,7 +279,7 @@ MyString& Engine::getRegex(const MyString& name)
 {
 	try
 	{
-		MyString toReturn=findAutomation(name)->getRegex()->getText();
+		MyString toReturn=findAutomation(name).getRegex()->getText();
 		return toReturn;
 	}
 	catch (std::exception a)
@@ -300,7 +300,6 @@ void Engine::executeCommand(const MyString& command)
 		} 
 		else if(type == "Create" && getCommandParametersCount(command) == 2)
 		{
-			std::cout << getParameter(command, 1);
 			MyString parameter1 = getParameter(command, 1);
 			createAutomation(parameter1, getParameter(command, 2));
 			std::cout << "Command executed succssefully";
@@ -351,7 +350,7 @@ void Engine::executeCommand(const MyString& command)
 		else if (type == "Reverse" && getCommandParametersCount(command) == 1)
 		{
 			reverseAutomata(getParameter(command, 1));
-			std::cout << "Command executed succssefully";
+			std::cout << "Command executed succssefully";	
 		}
 		else if (type == "RegexOf" && getCommandParametersCount(command) == 1)
 		{
@@ -370,6 +369,6 @@ void Engine::executeCommand(const MyString& command)
 	}
 	catch (std::exception a)
 	{
-		std::cout << a.what();
+		std::cout << a.what()<<"cokcs";
 	}
 }

@@ -4,7 +4,7 @@ class Engine
 {
 private:
 	MySet<Pair<RegexWrap,MyString>> automata;
-	SharedPtr<RegexWrap> findAutomation(const MyString& name);
+	RegexWrap& findAutomation(const MyString& name);
 	MyString getCommandName(const MyString& command);
 	bool isValidCommandName(const MyString& name);
 	size_t getCommandParametersCount(const MyString& command);
