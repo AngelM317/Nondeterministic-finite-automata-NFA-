@@ -4,13 +4,17 @@
 namespace
 {
 
-    size_t getRegexPartIndexe(const MyString& exp, size_t& startIndex)
+    size_t getRegexPartIndexe(const MyString& exp, size_t& startIndex, size_t maxIndex)
     {
         size_t finalIndex = startIndex;
         size_t bracketsCount = 0;
-        while (exp[finalIndex] != '('&& exp[finalIndex]!='+'&& exp[finalIndex] != '\0')
+        while (exp[finalIndex] != '('&& exp[finalIndex]!='+'&& exp[finalIndex] != '\0'&& exp[finalIndex] != ')')
         {
             finalIndex++;
+        }
+        if (exp[finalIndex] == ')')
+        {
+            return (finalIndex - 1 > maxIndex) ? maxIndex : finalIndex - 1;
         }
         if (exp[finalIndex] != '+')
         {
@@ -24,17 +28,17 @@ namespace
                 {
                     bracketsCount--;
                 }
-            } while (bracketsCount != 0 && exp[finalIndex] != 0);
+            } while (bracketsCount > 0 && exp[finalIndex] != 0);
 
         }
-        if (exp[finalIndex] != 0)
+        if (exp[finalIndex] > 0)
         {
             if (exp[finalIndex] == '*')
             {
-                return finalIndex;
+                return (finalIndex>maxIndex)?maxIndex-1:finalIndex;
             }
         }
-        return finalIndex - 1;
+        return (finalIndex-1 > maxIndex) ? maxIndex : finalIndex-1;
         
     }
     SharedPtr<Regex> getRegexPart(const MyString& exp,size_t& startIndex, size_t finalIndex)                //
@@ -49,9 +53,9 @@ namespace
                 SharedPtr<Regex> temp2 (getRegexPart(exp, ++startIndex, getRegexPartIndexe(exp,startIndex)));
                 SharedPtr<Regex> concat(new ConcatRegex(temp1, temp2));        */   
                 toBeReturned = new ConcatRegex(toBeReturned, new SimpleRegex(temp));
-                size_t newStart = getRegexPartIndexe(exp, startIndex);
-                SharedPtr<Regex> temp2(getRegexPart(exp, ++startIndex, newStart));
-                startIndex = newStart + 1;
+                size_t newStart = getRegexPartIndexe(exp, startIndex, finalIndex-1);
+                SharedPtr<Regex> temp2(getRegexPart(exp, ++startIndex, newStart-1));
+                startIndex;
                 toBeReturned =new ConcatRegex(toBeReturned, temp2);
                 temp = "";
             }
@@ -62,7 +66,7 @@ namespace
                 if (exp[startIndex] == '*')
                 {
                     startIndex++;
-                    toBeReturned = (new KleeneRegex(new SimpleRegex(temp)));
+                    toBeReturned = (new KleeneRegex(toBeReturned));
 
                 }
                 temp = "";
@@ -72,7 +76,8 @@ namespace
             else if (exp[startIndex] == '+')
             {
                 toBeReturned = new ConcatRegex(toBeReturned, new SimpleRegex(temp));
-                toBeReturned = new UnionRegex(toBeReturned, getRegexPart(exp, ++startIndex, getRegexPartIndexe(exp, startIndex)));
+                toBeReturned = new UnionRegex(toBeReturned, getRegexPart(exp, ++startIndex, getRegexPartIndexe(exp, startIndex,finalIndex-1)));
+               // toBeReturned->getAutomation().printTransitions();
                 temp = "";
             }
             else if (exp[startIndex] == '~')
