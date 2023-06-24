@@ -14,3 +14,8 @@ bool Regex::isEmpty() const
 {
     return text==nullptr;
 }
+
+void Regex::setText(const MyString&text)
+{
+    this->text = text;
+}

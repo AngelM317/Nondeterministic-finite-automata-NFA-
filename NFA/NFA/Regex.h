@@ -14,6 +14,7 @@ public:
 	virtual ~Regex() = default;
 	void virtual initializeAutomation() = 0;
 	bool isEmpty() const;
+	void setText(const MyString&);
 
 };
 

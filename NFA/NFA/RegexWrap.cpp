@@ -126,6 +126,7 @@ RegexWrap::RegexWrap(MyString& exp)
         {
             regex = getRegexPart(exp, startIndex, exp.length());       
         }
+        regex->setText(exp);
     }
 
 }

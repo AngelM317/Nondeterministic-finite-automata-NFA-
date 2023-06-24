@@ -1,6 +1,13 @@
 #include "Engine.h"
 #include <fstream>
 #include <iostream>
+namespace
+{
+	void successfulCommand()
+	{
+		std::cout << "Command executed succefully";
+	}
+}
 void Engine::Exists(const MyString& name)
 {
 	for (size_t i = 0; i < automata.getSize(); i++)
@@ -35,15 +42,19 @@ MyString Engine::getCommandName(const MyString& command)
 	{
 		return toReturn;
 	}
-	throw std::exception("Invalid command");
+	throw std::exception("Invalid command\n");
 }
 void Engine::prinhHelp()
 {
-	std::cout << "Create <regex> <nameOfAutomation>\nLoadFromFile <fileName> <nameToBeSavedWith>\nSaveInFile <fileName> <nameOfAutomation\nCheckWord <nameOFAutomation> <word>\nDeterminate <NameOFAutomation>\nMinimize <nameOfAutomation>\naddUnionOf <firstAutomationName> <secondAutomationName> <UnionName>\naddConcatenationOf <firstAutomationName> <secondAutomationName> <ConcatenationName>\nAddKleenieOf <automationName> <KleenieName>\nReverse <automationName>\nRegexOf <automationName>\n";
+	std::cout << "Create <regex> <nameOfAutomation>\nLoadFromFile <fileName> <nameToBeSavedWith>\nSaveInFile <fileName> <nameOfAutomation\nCheckWord <nameOFAutomation> <word>\nDeterminate <NameOFAutomation>\nMinimize <nameOfAutomation>\naddUnionOf <firstAutomationName> <secondAutomationName> <UnionName>\naddConcatenationOf <firstAutomationName> <secondAutomationName> <ConcatenationName>\nAddKleenieOf <automationName> <KleenieName>\nReverse <automationName>\nRegexOf <automationName>\nPrintInfo <automationName>\nMakeTotal <automationName>\n";
 }
 
 bool Engine::isValidCommandName(const MyString& name)
 {
+	if (name == "MakeTotal")
+	{
+		return true;
+	}
 	if (name == "SaveInFile")
 	{
 		return true;
@@ -92,6 +103,11 @@ bool Engine::isValidCommandName(const MyString& name)
 	{
 		return true;
 	}
+	if (name == "PrintInfo")
+	{
+		return true;
+	}	
+
 	return false;
 }
 
@@ -146,12 +162,14 @@ void Engine::createAutomation(MyString& regex, const MyString& name)
 {
 	try
 	{
+		Exists(name);
 		MyString newRegex = "(" + regex + ")";
 		automata.addElement(Pair<RegexWrap, MyString>(RegexWrap(newRegex), name));
+		successfulCommand();
 	}
 	catch(std::exception)
 	{
-		std::cout << "Automation with this name already exists";
+		std::cout << "Automation with this name already exists\n";
 	}
 	
 }
@@ -165,6 +183,7 @@ void Engine::automationFromFile(const MyString& name, const MyString& nameOfAuto
 		MyString regex;
 		file >> regex;
 		createAutomation(regex, nameOfAutomation);
+		successfulCommand();
 	}
 	else
 	{
@@ -180,6 +199,7 @@ void Engine::saveAutomatioInFle(const MyString& name, const MyString& automation
 		std::ofstream file;
 		file.open(name.c_str());
 		file<<findAutomation(name).getRegex()->getText();
+		successfulCommand();
 	}
 	catch (std::exception a)
 	{
@@ -204,6 +224,20 @@ void Engine::makeDeterm(const MyString& name)
 	try
 	{
 		findAutomation(name).getRegex()->getAutomation().convertToDfa();
+		successfulCommand();
+	}
+	catch (std::exception a)
+	{
+		std::cout << a.what();
+	}
+}
+
+void Engine::makeTotal(const MyString& name)
+{
+	try
+	{
+		findAutomation(name).getRegex()->getAutomation().makeTotal();
+		successfulCommand();
 	}
 	catch (std::exception a)
 	{
@@ -216,6 +250,7 @@ void Engine::minimize(const MyString& name)
 	try
 	{
 		findAutomation(name).getRegex()->getAutomation().minimize();
+		successfulCommand();
 	}
 	catch (std::exception a)
 	{
@@ -229,6 +264,7 @@ void Engine::addUnionOfAutomata(const MyString& name1, const MyString& name2, co
 	{
 		MyString unionRegex = findAutomation(name1).getRegex()->getText() + "+"+ findAutomation(name2).getRegex()->getText();
 		createAutomation(unionRegex, nameOfUnion);
+		successfulCommand();
 	}
 	catch (std::exception a)
 	{
@@ -243,6 +279,7 @@ void Engine::addKleenieOfAutomata(const MyString& nameOfAutomation, const MyStri
 		MyString kleenieRegex = "(";
 		kleenieRegex = kleenieRegex+ findAutomation(nameOfAutomation).getRegex()->getText() + ")*";
 		createAutomation(kleenieRegex, nameOfKleenieAutomation);
+		successfulCommand();
 	}
 	catch (std::exception a)
 	{
@@ -256,6 +293,7 @@ void Engine::addConcatenationOfAutomata(const MyString& name1, const MyString& n
 	{
 		MyString unionRegex = findAutomation(name1).getRegex()->getText() + findAutomation(name2).getRegex()->getText();
 		createAutomation(unionRegex, nameOFConcat);
+		successfulCommand();
 	}
 	catch (std::exception a)
 	{
@@ -268,6 +306,7 @@ void Engine::reverseAutomata(const MyString& name)
 	try
 	{
 		findAutomation(name).getRegex()->getAutomation().reverseAutomata();
+		successfulCommand();
 	}
 	catch (std::exception a)
 	{
@@ -296,18 +335,15 @@ void Engine::executeCommand(const MyString& command)
 		if (type == "SaveInFile"&&getCommandParametersCount(command)==2)
 		{
 			saveAutomatioInFle(getParameter(command, 1), getParameter(command, 2));
-			std::cout << "Command executed succssefully";
 		} 
 		else if(type == "Create" && getCommandParametersCount(command) == 2)
 		{
 			MyString parameter1 = getParameter(command, 1);
 			createAutomation(parameter1, getParameter(command, 2));
-			std::cout << "Command executed succssefully";
 		} 
 		else if (type == "LoadFromFile" && getCommandParametersCount(command) == 2)
 		{
 			automationFromFile(getParameter(command, 1), getParameter(command, 2));
-			std::cout << "Command executed succssefully";
 		}	
 		else if (type == "CheckWord" && getCommandParametersCount(command) == 2)
 		{
@@ -320,46 +356,46 @@ void Engine::executeCommand(const MyString& command)
 			{
 				std::cout << "false\n";
 			}
-			std::cout << "Command executed succssefully";
 		}
 		else if (type == "Determinate" && getCommandParametersCount(command) == 1)
 		{
 			makeDeterm(getParameter(command, 1));
-			std::cout << "Command executed succssefully";
 		}
 		else if (type == "Minimize" && getCommandParametersCount(command) == 1)
 		{
 			minimize(getParameter(command, 1));
-			std::cout << "Command executed succssefully";
 		}
 		else if (type == "AddUnionOf" && getCommandParametersCount(command) == 3)
 		{
 			addUnionOfAutomata(getParameter(command, 1), getParameter(command, 2), getParameter(command, 3));
-			std::cout << "Command executed succssefully";
 		}
 		else if (type == "AddKleenieOf" && getCommandParametersCount(command) == 2)
 		{
 			addKleenieOfAutomata(getParameter(command, 1), getParameter(command, 2));
-			std::cout << "Command executed succssefully";
 		}
 		else if (type == "AddConcatenationOf" && getCommandParametersCount(command) == 3)
 		{
 			addConcatenationOfAutomata(getParameter(command, 1), getParameter(command, 2), getParameter(command, 3));
-			std::cout << "Command executed succssefully";
 		}
 		else if (type == "Reverse" && getCommandParametersCount(command) == 1)
 		{
 			reverseAutomata(getParameter(command, 1));
-			std::cout << "Command executed succssefully";	
 		}
 		else if (type == "RegexOf" && getCommandParametersCount(command) == 1)
 		{
 			getRegex(getParameter(command, 1));
-			std::cout << "Command executed succssefully";
+		}
+		else if (type == "PrintInfo" && getCommandParametersCount(command) == 1)
+		{
+			PrintInfo(getParameter(command, 1));
 		}
 		else if (type == "help")
 		{
 			prinhHelp();
+		}
+		else if (type == "MakeTotal" && getCommandParametersCount(command) == 1)
+		{
+			makeTotal(getParameter(command, 1));
 		}
 		else
 		{
@@ -371,4 +407,21 @@ void Engine::executeCommand(const MyString& command)
 	{
 		std::cout << a.what();
 	}
+}
+
+void Engine::PrintInfo(const MyString& name)
+{
+	std::cout << "Starting States: ";
+	NondetemFiniteAutomata temp = findAutomation(name).getRegex()->getAutomation();
+	for (size_t i = 0; i < temp.getStartingStates().getSize(); i++)
+	{
+		std::cout<<temp.getStartingStates()[i]<<" ";
+	}
+	std::cout << "Final States: ";
+	for (size_t i = 0; i < temp.getFinalStates().getSize(); i++)
+	{
+		std::cout << temp.getFinalStates()[i] << " ";
+	}
+	std::cout << "\nTransitions are: \n";
+	temp.printTransitions();
 }

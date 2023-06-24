@@ -20,6 +20,7 @@ private:
 		void saveAutomatioInFle(const MyString& name, const MyString& automationName);
 		bool accepts(const MyString& name, const MyString& word);
 		void makeDeterm(const MyString& name);
+		void makeTotal(const MyString& name);
 		void minimize(const MyString& name);
 		void addUnionOfAutomata(const MyString& name1, const MyString& name2, const MyString& nameOfUnion);
 		void addKleenieOfAutomata(const MyString& nameOfAutomation, const MyString& nameOfKleenieAutomation);
@@ -27,5 +28,6 @@ private:
 		void reverseAutomata(const MyString& name);
 		MyString& getRegex(const MyString& name);
 		void executeCommand(const MyString& name);
+		void PrintInfo(const MyString& name);
 };
 
