@@ -2,7 +2,7 @@
 #include "NondetemFiniteAutomata.h"
 namespace
 {
-	void addAlphabets(NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2)
+	void addAlphabets(NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2) //Unites alpahbets
 	{
 		for (size_t i = 0; i < automata2.getAlphabeth().getSize(); i++)
 		{
@@ -10,7 +10,7 @@ namespace
 		}
 	}
 
-	NondetemFiniteAutomata Union(const NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2)
+	NondetemFiniteAutomata Union(const NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2) //Just make 2 automata in one without crossing them in any way
 	{
 		NondetemFiniteAutomata toReturn(automata1);
 		addAlphabets(toReturn, automata2);
@@ -36,7 +36,7 @@ namespace
 		return toReturn;
 	}
 
-	NondetemFiniteAutomata Concat(const NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2)
+	NondetemFiniteAutomata Concat(const NondetemFiniteAutomata& automata1, const NondetemFiniteAutomata& automata2) // Uses the first automtion then makes the finals of the first to do the job of the starting of the first
 	{
 		NondetemFiniteAutomata toReturn = automata1;
 		addAlphabets(toReturn, automata2);
@@ -59,7 +59,7 @@ namespace
 		{
 			for (size_t j = 0; j < automata2.getStartingStates().getSize(); j++)
 			{
-				if (automata2.getFinalStates()[i] == automata2.getStartingStates()[j])
+				if (automata2.getFinalStates()[i] == automata2.getStartingStates()[j]) // searches if some of the automation 2 starting state is final so that the new automation can keep all final states of the first
 				{
 					clear = false;
 					break;
@@ -95,7 +95,7 @@ namespace
 		return toReturn;
 	}
 
-	NondetemFiniteAutomata Kleene(const NondetemFiniteAutomata& automata1)
+	NondetemFiniteAutomata Kleene(const NondetemFiniteAutomata& automata1) // Adds new starting state which is final and makes all final states ( and the new one) to do the job of the old starting ones; THe new starting one is the new added state
 	{
 		NondetemFiniteAutomata toReturn(automata1);
 		toReturn.addState();

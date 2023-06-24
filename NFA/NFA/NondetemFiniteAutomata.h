@@ -11,7 +11,7 @@ private:
 	MySet<size_t> finalStates;
 	MySet<size_t> startingStates;
 	Vector<size_t> states;
-	MySet<size_t> errorStates;
+	MySet<size_t> errorStates; //FOr much bettter determinization
 	void decreaseStatesFromIndex(size_t index);
 	void accesibleStatesFrom(MySet<size_t>& states,size_t state) const;
 	bool isErrorState(size_t index) const;

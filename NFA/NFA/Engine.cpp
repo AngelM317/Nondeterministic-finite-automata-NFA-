@@ -106,7 +106,11 @@ bool Engine::isValidCommandName(const MyString& name)
 	if (name == "PrintInfo")
 	{
 		return true;
-	}	
+	}
+	if (name == "IsEmptyLanguage")
+	{
+		return true;
+	}
 
 	return false;
 }
@@ -183,7 +187,6 @@ void Engine::automationFromFile(const MyString& name, const MyString& nameOfAuto
 		MyString regex;
 		file >> regex;
 		createAutomation(regex, nameOfAutomation);
-		successfulCommand();
 	}
 	else
 	{
@@ -397,6 +400,10 @@ void Engine::executeCommand(const MyString& command)
 		{
 			makeTotal(getParameter(command, 1));
 		}
+		else if (type == "MakeTotal" && getCommandParametersCount(command) == 1)
+		{
+			isEmptyLanguage(getParameter(command, 1));
+		}
 		else
 		{
 			std::cout << "Invalid parameters for the command: " << command;
@@ -424,4 +431,16 @@ void Engine::PrintInfo(const MyString& name)
 	}
 	std::cout << "\nTransitions are: \n";
 	temp.printTransitions();
+}
+
+void Engine::isEmptyLanguage(const MyString& name)
+{
+	if (findAutomation(name).getRegex()->getAutomation().isEmptyLanguage())
+	{
+		std::cout << "True\n";
+	}
+	else
+	{
+		std::cout << "False\n";
+	}
 }

@@ -29,5 +29,6 @@ private:
 		MyString& getRegex(const MyString& name);
 		void executeCommand(const MyString& name);
 		void PrintInfo(const MyString& name);
+		void isEmptyLanguage(const MyString& name);
 };
 

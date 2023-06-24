@@ -64,7 +64,7 @@ void NondetemFiniteAutomata::decreaseStatesFromIndex(size_t index)
 	}
 }
 
-void NondetemFiniteAutomata::accesibleStatesFrom(MySet<size_t>& accessedStates, size_t state) const
+void NondetemFiniteAutomata::accesibleStatesFrom(MySet<size_t>& accessedStates, size_t state) const //Finds every accebile state From the start BY DFS
 {
 	accessedStates.addElement(state);
 	for (size_t i = 0; i < transitions[state - 1].getSize(); i++)
@@ -151,7 +151,7 @@ void NondetemFiniteAutomata::removeState(size_t state)
 	}
 }
 
-void NondetemFiniteAutomata::removeUnaccessibleStates()
+void NondetemFiniteAutomata::removeUnaccessibleStates() 
 {
 	MySet<size_t> allAccessibleStates;
 	for (size_t i = 0; i < startingStates.getSize(); i++)
@@ -240,7 +240,7 @@ bool NondetemFiniteAutomata::isFinalState(size_t state) const
 	return finalStates.contains(state);
 }
 
-bool NondetemFiniteAutomata::isEmptyLanguage() const
+bool NondetemFiniteAutomata::isEmptyLanguage() const 
 {
 	for (size_t i = 0; i < startingStates.getSize(); i++)
 	{
@@ -337,9 +337,9 @@ MyString NondetemFiniteAutomata::regexFromAutomation() const
 	temp.addTransition(temp.getStatesCount(), '@', 1);
 	temp.clearFinalStates();
 	temp.clearStartingStates();
-	temp.makeStateFinal(temp.getStatesCount() - 1);
+	temp.makeStateFinal(temp.getStatesCount() - 1);                                         //adding new starting and new FInishing state with epselon transition to the old starting and epsellon transtion from all ending to new startung
 	temp.makeStateStarting(temp.getStatesCount());
-	temp.removeUnaccessibleStates();
+	temp.removeUnaccessibleStates(); 
 	Vector<Vector<Pair<MyString,size_t>>> allRegTransitions;
 
 	for (size_t i = 0; i < temp.transitions.getSize(); i++)
@@ -353,7 +353,7 @@ MyString NondetemFiniteAutomata::regexFromAutomation() const
 	for (size_t i = 0; i < temp.states.getSize(); i++)
 	{
 		MyString Kleenie = "(";
-		bool first = true;
+		bool first = true; //for adding the + sign correctly
 		for (size_t k = 0; k < allRegTransitions[i].getSize(); k++)
 		{
 			
@@ -380,7 +380,7 @@ MyString NondetemFiniteAutomata::regexFromAutomation() const
 		{
 			Kleenie = "";
 		}
-		for (size_t j = 0; j < allRegTransitions.getSize(); j++)
+		for (size_t j = 0; j < allRegTransitions.getSize(); j++) 
 		{
 			if (j <= i)
 				continue;
@@ -396,13 +396,12 @@ MyString NondetemFiniteAutomata::regexFromAutomation() const
 						Pair<MyString, size_t> pairToCocat = allRegTransitions[i][m];
 						if(pairToCocat.getSecond()!=i+1)
 						{
-							allRegTransitions[j].pushBack(Pair<MyString, size_t>(allRegTransitions[j][k].getFirst() +Kleenie+ pairToCocat.getFirst(), pairToCocat.getSecond()));
+							allRegTransitions[j].pushBack(Pair<MyString, size_t>(allRegTransitions[j][k].getFirst() +Kleenie+ pairToCocat.getFirst(), pairToCocat.getSecond()));        
 							//std::cout << j+1 << " | " << allRegTransitions[j][k].getFirst() + Kleenie + pairToCocat.getFirst() << " | " << pairToCocat.getSecond() << "\n";
 						}
 					}
 					if(!temp.isStartingState(j+1))
 					allRegTransitions[j].popAt(k);
-					
 				}
 			}
 		}
@@ -480,7 +479,7 @@ void NondetemFiniteAutomata::convertToDfa()
 						{
 							if (!errorStates.contains(currPair.getSecond()))
 							{
-								set.addElement(currPair.getSecond());
+								set.addElement(currPair.getSecond());												//making subsets for new states
 								if (isFinalState(currPair.getSecond()))
 								{
 									isFinal = true;
@@ -494,7 +493,7 @@ void NondetemFiniteAutomata::convertToDfa()
 						}
 					}
 				}
-				if (set.getSize() != 0 || error.getSize() != 0)
+				if (set.getSize() != 0 || error.getSize() != 0)			//adding the new subset as state
 				{
 					if (!newStates.contains(set))
 					{
@@ -540,7 +539,7 @@ void NondetemFiniteAutomata::reverseAutomata()
 	{
 		for (size_t j = 0; j < transitions[i].getSize(); j++)
 		{
-			newTransitions[transitions[i][j].getSecond() - 1].pushBack(Pair<char, size_t>(transitions[i][j].getFirst(), i + 1));
+			newTransitions[transitions[i][j].getSecond() - 1].pushBack(Pair<char, size_t>(transitions[i][j].getFirst(), i + 1)); //flipiing the transitions
 		}
 	}
 	transitions.clear();

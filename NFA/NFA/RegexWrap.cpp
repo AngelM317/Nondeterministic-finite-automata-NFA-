@@ -4,7 +4,7 @@
 namespace
 {
 
-    size_t getRegexPartIndexe(const MyString& exp, size_t& startIndex, size_t maxIndex)
+    size_t getRegexPartIndexe(const MyString& exp, size_t& startIndex, size_t maxIndex) //finds the new part to be calculated
     {
         size_t finalIndex = startIndex;
         size_t bracketsCount = 0;
@@ -43,21 +43,18 @@ namespace
     }
     SharedPtr<Regex> getRegexPart(const MyString& exp,size_t& startIndex, size_t finalIndex)                //
     {
-        SharedPtr<Regex> toBeReturned = new SimpleRegex("");
-        MyString temp = "";
+        SharedPtr<Regex> toBeReturned = new SimpleRegex(""); //result so far
+        MyString temp = ""; // saves consecutive letters (a word) untill it find some symbol signaling some operation
         while (exp[startIndex]!='\0'&&finalIndex>=startIndex)
         {
             if (exp[startIndex] == '(')
             {
-                /*SharedPtr<Regex> temp1(new SimpleRegex(temp));
-                SharedPtr<Regex> temp2 (getRegexPart(exp, ++startIndex, getRegexPartIndexe(exp,startIndex)));
-                SharedPtr<Regex> concat(new ConcatRegex(temp1, temp2));        */   
                 toBeReturned = new ConcatRegex(toBeReturned, new SimpleRegex(temp));
-                size_t newStart = getRegexPartIndexe(exp, startIndex, finalIndex-1);
+                size_t newStart = getRegexPartIndexe(exp, startIndex, finalIndex-1); //The next art to concat with
                 SharedPtr<Regex> temp2(getRegexPart(exp, ++startIndex, newStart-1));
                 startIndex;
                 toBeReturned =new ConcatRegex(toBeReturned, temp2);
-                temp = "";
+                temp = ""; 
             }
             else if (exp[startIndex] == ')')
             {
@@ -77,7 +74,6 @@ namespace
             {
                 toBeReturned = new ConcatRegex(toBeReturned, new SimpleRegex(temp));
                 toBeReturned = new UnionRegex(toBeReturned, getRegexPart(exp, ++startIndex, getRegexPartIndexe(exp, startIndex,finalIndex-1)));
-               // toBeReturned->getAutomation().printTransitions();
                 temp = "";
             }
             else if (exp[startIndex] == '~')
@@ -165,7 +161,7 @@ void RegexWrap::clearWs(MyString& text)
     MySet<size_t> wsIndex;
     for (size_t i = 0; i <= text.length(); i++)
     {
-        if (text[i] == ' '|| text[i] == '@')
+        if (text[i] == ' '|| text[i] == '@') //writting epsellon or blank space doest change the nature of the regex but without them its much easier to calculate
         {
             wsIndex.addElement(i);
         }
