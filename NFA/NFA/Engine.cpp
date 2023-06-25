@@ -5,6 +5,7 @@ namespace
 {
 	void successfulCommand()
 	{
+		system("CLS");
 		std::cout << "Command executed succefully";
 	}
 }
@@ -46,7 +47,7 @@ MyString Engine::getCommandName(const MyString& command)
 }
 void Engine::prinhHelp()
 {
-	std::cout << "Create <regex> <nameOfAutomation>\nLoadFromFile <fileName> <nameToBeSavedWith>\nSaveInFile <fileName> <nameOfAutomation\nCheckWord <nameOFAutomation> <word>\nDeterminate <NameOFAutomation>\nMinimize <nameOfAutomation>\naddUnionOf <firstAutomationName> <secondAutomationName> <UnionName>\naddConcatenationOf <firstAutomationName> <secondAutomationName> <ConcatenationName>\nAddKleenieOf <automationName> <KleenieName>\nReverse <automationName>\nRegexOf <automationName>\nPrintInfo <automationName>\nMakeTotal <automationName>\n";
+	std::cout << "Create <regex> <nameOfAutomation>\nLoadFromFile <fileName> <nameToBeCreatedWith>\nSaveInFile <fileName> <nameOfAutomation>\nCheckWord <nameOFAutomation> <word>\nDeterminate <NameOFAutomation>\nMinimize <nameOfAutomation>\naddUnionOf <firstAutomationName> <secondAutomationName> <UnionName>\naddConcatenationOf <firstAutomationName> <secondAutomationName> <ConcatenationName>\nAddKleenieOf <automationName> <KleenieName>\nReverse <automationName>\nRegexOf <automationName>\nPrintInfo <automationName>\nMakeTotal <automationName>\nIsEmptyLanguage <automationName>\n";
 }
 
 bool Engine::isValidCommandName(const MyString& name)
@@ -386,7 +387,7 @@ void Engine::executeCommand(const MyString& command)
 		}
 		else if (type == "RegexOf" && getCommandParametersCount(command) == 1)
 		{
-			getRegex(getParameter(command, 1));
+			std::cout<<getRegex(getParameter(command, 1));
 		}
 		else if (type == "PrintInfo" && getCommandParametersCount(command) == 1)
 		{
